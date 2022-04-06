@@ -1,0 +1,54 @@
+{% import "bootstrap/utils.html" as utils %}
+{% extends "base.html" %}
+{% block title %}Condition{% endblock %}
+{% block body %}
+<div class="content-section">
+  <div class="outer">
+    <div class="middle">
+      <div class="inner">
+        <br />
+        {{ utils.flashed_messages() }}
+        <br />
+        <h1 style="text-align:center;">Conditions</h1>
+        <div class="button-add">
+          <a href="{{ url_for('admin.add_condition') }}" class="btn btn-default btn-lg">Add Condition</a>
+        </div>
+        {% if conditions %}
+        <hr class="intro-divider">
+        <div class="center">
+          <table class="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th width="5%"> # </th>
+                <th width="65%"> Name </th>
+                <th width="5%"> Edit </th>
+                <th width="5%"> Delete </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for condition in conditions %}
+              <tr>
+                <td></td>
+                <td> {{ condition.name }} </td>
+                <td>
+                  <a href="{{ url_for('admin.edit_conditions', id=condition.id) }}"><img src="../../../static/img/pencil-square.svg" alt="edit_button"></a>
+                </td>
+                <td>
+                  <a href="{{ url_for('admin.delete_condition', id=condition.id) }}"><img src="../../../static/img/trash3.svg" alt="delete_button"></a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div style="text-align: center">
+          {% else %}
+          <div style="text-align: center">
+            <h3> No conditions have been added. </h3>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}

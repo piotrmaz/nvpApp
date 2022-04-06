@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Forbidden{% endblock %}
+{% block body %}
+<div class="content-section" style="padding: 150px; background-color: #ebf1f5">
+  <div class="outer">
+    <div class="middle">
+      <div class="inner" style="height: 100%;">
+        <div style="text-align: center;">
+            <h1 class="error-header"> 403 </h1>
+            <h5 class="error-message"> Access forbidden or your account does not confirmed.</h5>
+            <h5 class="error-message">Please contact with administrator.</h5>
+            <a href="{{ url_for('home.homepage') }}" class="btn btn-outline-secondary btn-sm">Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

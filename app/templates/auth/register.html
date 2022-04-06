@@ -1,0 +1,64 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block body %}
+<!-- <div class="content-section">
+  <div class="center">
+    <h1>Register for an account</h1>
+    <br/>
+    {{ wtf.quick_form(form) }}
+  </div>
+</div> -->
+
+<div class="intro-header">
+
+  <div class="content-section" style="background: transparent; border: none">
+
+    <div class="center" style="width: 35%; text-align: center; background: transparent; background-color: rgba(238, 243, 246, 0.6); border-radius: 20px;">
+
+      <form style="background-color: rgba(238, 243, 246, 0.6); border-radius: 20px;" action="/register" method="POST">
+        <h3 style="padding-top: 30px; color: rgb(63 124 189);">CREATE NEW ACCOUNT</h3>
+        <hr class="intro-divider">
+        {{ form.csrf_token }}
+        <div class="">
+          <div class="" style="padding-bottom: 10px; padding-top: 30px;">
+            <img style="height: 30px; filter: invert(39%) sepia(91%) saturate(2085%) hue-rotate(195deg) brightness(100%) contrast(102%);" src="../../../static/img/at.svg"
+              alt="at">{{ form.email(class="login_input", placeholder="Type your e-mail") }}
+          </div>
+          <div class="" style="padding-bottom: 10px;">
+            <img style="height: 30px; filter: invert(39%) sepia(91%) saturate(2085%) hue-rotate(195deg) brightness(100%) contrast(102%);" src="../../../static/img/person.svg"
+              alt="person">
+            {{ form.username(class="login_input", placeholder="Type your username") }}
+          </div>
+          <div class="" style="padding-bottom: 10px;">
+            <img style="height: 30px; filter: invert(39%) sepia(91%) saturate(2085%) hue-rotate(195deg) brightness(100%) contrast(102%);" src="../../../static/img/person.svg"
+              alt="person">
+            {{ form.first_name(class="login_input", placeholder="Type your first name") }}
+          </div>
+          <div class="" style="padding-bottom: 10px;">
+            <img style="height: 30px; filter: invert(39%) sepia(91%) saturate(2085%) hue-rotate(195deg) brightness(100%) contrast(102%);" src="../../../static/img/person.svg"
+              alt="person">
+            {{ form.last_name(class="login_input", placeholder="Type your last name") }}
+          </div>
+          <div class="" style="padding-bottom: 10px;">
+            <img style="height: 30px; filter: invert(39%) sepia(91%) saturate(2085%) hue-rotate(195deg) brightness(100%) contrast(102%);" src="../../../static/img/key.svg"
+              alt="key">{{ form.password(class="login_input", placeholder="Type your password") }}
+          </div>
+          <div class="" style="padding-bottom: 30px;">
+            <img style="height: 30px; filter: invert(39%) sepia(91%) saturate(2085%) hue-rotate(195deg) brightness(100%) contrast(102%);" src="../../../static/img/key.svg"
+              alt="key">{{ form.confirm_password(class="login_input", placeholder="Confirm your password") }}
+          </div>
+          <div class="" style="padding-bottom: 30px;">
+            {{ wtf.form_field(form.submit)}}
+          </div>
+        </div>
+      </form>
+
+      <!-- <br/>
+    {{ wtf.quick_form(form) }} -->
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}

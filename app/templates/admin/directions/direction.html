@@ -1,0 +1,28 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+{% block title %}
+    {% if add_directions %}
+        Add Direction
+    {% else %}
+        Edit Direction
+    {% endif %}
+{% endblock %}
+{% block body %}
+<div class="content-section">
+ <div class="outer">
+    <div class="middle">
+      <div class="inner">
+        <div class="center">
+            {% if add_directions %}
+                <h1>Add Direction</h1>
+            {% else %}
+                <h1>Edit Direction</h1>
+            {% endif %}
+            <br/>
+            {{ wtf.quick_form(form, novalidate=True) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
