@@ -1,12 +1,12 @@
-from flask import abort, flash, redirect, render_template, url_for, request
+from flask import abort, flash, redirect, render_template, url_for, request, session
 from flask_login import current_user, login_required
 from sqlalchemy.orm import join
 from datetime import datetime
 
 from . import admin
-from .forms import DepartmentForm, RoleForm, EmployeeAssignForm, SupplierForm, UnitsForm, ConsumableForm, ParcelForm, ConsumableConsumptionForm, ConsumableDeliveryForm, ConditionForm, DirectionForm, PackageForm, PackageDeliveryForm, PackageFormEdit
+from .forms import DepartmentForm, RoleForm, EmployeeAssignForm, SupplierForm, UnitsForm, ConsumableForm, ParcelForm, ConsumableConsumptionForm, ConsumableDeliveryForm, ConditionForm, DirectionForm, PackageForm, PackageDeliveryForm, PackageFormEdit, PackageReceiveForm
 from .. import db
-from ..models import Department, Role, Employee, Supplier, Unit, Consumable, Parcel, ConsumableConsumption, ConsumableDelivery, Condition, Direction, Package, PackageDelivery, PackageSend
+from ..models import Department, Role, Employee, Supplier, Unit, Consumable, Parcel, ConsumableConsumption, ConsumableDelivery, Condition, Direction, Package, PackageDelivery, PackageSend, PackageReceive
 
 
 def check_admin():
@@ -42,6 +42,8 @@ def add_department():
     add_department = True
 
     form = DepartmentForm()
+    if form.cancel.data:
+        return redirect(url_for('admin.list_departments'))
     if form.validate_on_submit():
         department = Department(name=form.name.data,
                                 description=form.description.data)
@@ -74,6 +76,8 @@ def edit_department(id):
 
     department = Department.query.get_or_404(id)
     form = DepartmentForm(obj=department)
+    if form.cancel.data:
+        return redirect(url_for('admin.list_departments'))
     if form.validate_on_submit():
         department.name = form.name.data
         department.description = form.description.data
@@ -132,6 +136,8 @@ def add_role():
     add_role = True
 
     form = RoleForm()
+    if form.cancel.data:
+        return redirect(url_for('admin.list_roles'))
     if form.validate_on_submit():
         role = Role(name=form.name.data,
                     description=form.description.data)
@@ -164,6 +170,8 @@ def edit_role(id):
 
     role = Role.query.get_or_404(id)
     form = RoleForm(obj=role)
+    if form.cancel.data:
+        return redirect(url_for('admin.list_roles'))
     if form.validate_on_submit():
         role.name = form.name.data
         role.description = form.description.data
@@ -226,6 +234,9 @@ def assign_employee(id):
         abort(403)
 
     form = EmployeeAssignForm(obj=employee)
+    if form.cancel.data:
+        return redirect(url_for('admin.list_employees'))
+
     if form.validate_on_submit():
         employee.department = form.department.data
         employee.role = form.role.data
@@ -255,6 +266,41 @@ def confirmed_employee(id):
     db.session.commit()
     flash('You have successfully confirmed new employee.')
 
+    return redirect(url_for('admin.list_employees'))
+
+@admin.route('/employee/priviliges/<int:id>', methods=['GET', 'POST'])
+@login_required
+def grant_admin_priviliges(id):
+    """
+    Grant admin priviliges for employee
+    """
+
+    check_admin()
+
+    employee = Employee.query.get_or_404(id)
+    employee.is_admin = True
+    employee.is_granted = True
+
+    db.session.commit()
+    flash('You have successfully granted admin priviliges for employee.')
+    return redirect(url_for('admin.list_employees'))
+
+
+@admin.route('/employee/deny/<int:id>', methods=['GET', 'POST'])
+@login_required
+def deny_admin_priviliges(id):
+    """
+    Deny admin priviliges for employee
+    """
+
+    check_admin()
+
+    employee = Employee.query.get_or_404(id)
+    employee.is_admin = False
+    employee.is_granted = False
+
+    db.session.commit()
+    flash('You have successfully deny admin priviliges for employee.')
     return redirect(url_for('admin.list_employees'))
 
 
@@ -301,6 +347,8 @@ def add_supplier():
     add_supplier = True
 
     form = SupplierForm()
+    if form.cancel.data:
+        return redirect(url_for('admin.list_suppliers'))
     if form.validate_on_submit():
         supplier = Supplier(name=form.name.data)
         try:
@@ -332,6 +380,9 @@ def edit_supplier(id):
 
     supplier = Supplier.query.get_or_404(id)
     form = SupplierForm(obj=supplier)
+    if form.cancel.data:
+        return redirect(url_for('admin.list_suppliers'))
+
     if form.validate_on_submit():
         supplier.name = form.name.data
         db.session.commit()
@@ -388,6 +439,9 @@ def add_unit():
     add_units = True
 
     form = UnitsForm()
+    if form.cancel.data:
+        return redirect(url_for('admin.list_units'))
+
     if form.validate_on_submit():
         unit = Unit(unit_type=form.unit_type.data)
         try:
@@ -419,6 +473,9 @@ def edit_unit(id):
 
     unit = Unit.query.get_or_404(id)
     form = UnitsForm(obj=unit)
+    if form.cancel.data:
+        return redirect(url_for('admin.list_units'))
+
     if form.validate_on_submit():
         unit.unit_type = form.unit_type.data
         db.session.commit()
@@ -577,7 +634,6 @@ def consumption_consumables(id):
 
         consum_consumptions = ConsumableConsumption()
 
-        # form['quantity'].data == ['quantity']
         consum_consumptions.consumab_id=consumable.id
         consum_consumptions.user_consumption_id=curr_user
         consum_consumptions.date=now
@@ -597,7 +653,7 @@ def consumption_consumables(id):
 
     return render_template('admin/consumables/consumable.html', action="Edit",
                            add_consumable=add_consumable, form=form,
-                           consumable=consumable, title="Update Consumable")
+                           consumable=consumable, title="Consumption Consumable")
 
 
 @admin.route('/consumables/delivery/<int:id>', methods=['GET', 'POST'])
@@ -613,6 +669,7 @@ def delivery_consumables(id):
     consumable = Consumable.query.get_or_404(id)
     delivery = consumable.quantity
     form = ConsumableDeliveryForm(obj=consumable)
+    form.quantity.data = ""
     if form.cancel.data:
         return redirect(url_for('admin.list_consumables'))
 
@@ -627,13 +684,13 @@ def delivery_consumables(id):
         consum_delivery.consumable_id=consumable.id
         consum_delivery.user_delivery_id=curr_user
         consum_delivery.supplier_consumable_delivery_id=suppliery.id
-        consum_delivery.quantity=form.quantity.data,
+        consum_delivery.quantity=request.form['quantity'],
         consum_delivery.date=now
 
         db.session.add(consum_delivery)
 
-        curr_consum = consum_delivery.quantity
-        addd = sum(curr_consum, delivery)
+        curr_consum = request.form['quantity']
+        addd = int(curr_consum) + int(delivery)
         consumable.quantity = addd
 
         db.session.commit()
@@ -664,6 +721,22 @@ def delete_consumables(id):
 
     return render_template(title="Delete Consumable")
 
+
+@admin.route('/consumable/details/<int:id>', methods=['GET', 'POST'])
+@login_required
+def details_consumable(id):
+    "Details one consumable"
+
+    check_admin()
+
+    add_consumable = False
+
+    consumable = Consumable.query.get_or_404(id)
+    consumption = db.session.query(ConsumableConsumption).filter(ConsumableConsumption.consumab_id==consumable.id).order_by(ConsumableConsumption.date.desc()).all()
+    delivers = db.session.query(ConsumableDelivery).filter(ConsumableDelivery.consumable_id==consumable.id).order_by(ConsumableDelivery.date.desc()).all()
+
+    return render_template('admin/consumable_details/consumable_details.html',
+                        consumable=consumable, consumption=consumption, delivers=delivers, title='Details consumable')
 
 # Parcel view
 
@@ -1060,7 +1133,9 @@ def delivery_packages(id):
 
     package = Package.query.get_or_404(id)
     delivery = package.quantity
+
     form = PackageDeliveryForm(obj=package)
+    form.quantity.data = ""
     if form.cancel.data:
         return redirect(url_for('admin.list_packages'))
 
@@ -1074,7 +1149,7 @@ def delivery_packages(id):
         package_delivery = PackageDelivery()
 
         package_delivery.package_id=package.id,
-        package_delivery.quantity=form.quantity.data,
+        package_delivery.quantity=request.form['quantity'],
         package_delivery.description=form.description.data,
         package_delivery.supplier_id=suppliery.id,
         package_delivery.user_id=curr_user
@@ -1083,10 +1158,10 @@ def delivery_packages(id):
         db.session.add(package_delivery)
 
         curr_inside = package.inside
-        curr_package = package_delivery.quantity
-        addd = sum(curr_package, delivery)
-        
-        package.inside = sum(curr_package, curr_inside)
+        curr_package = request.form['quantity']
+        addd = int(curr_package) + int(delivery)
+
+        package.inside = int(curr_package) + int(curr_inside)
         package.quantity = addd
 
 
@@ -1113,6 +1188,7 @@ def send_packages(id):
     package = Package.query.get_or_404(id)
 
     form = PackageDeliveryForm(obj=package)
+    form.quantity.data = ""
     if form.cancel.data:
         return redirect(url_for('admin.list_packages'))
 
@@ -1125,7 +1201,7 @@ def send_packages(id):
         package_send = PackageSend()
 
         package_send.package_id=package.id,
-        package_send.quantity=form['quantity'].data,
+        package_send.quantity=request.form['quantity'],
         package_send.description=form.description.data,
         package_send.supplier_id=suppliery.id,
         package_send.user_id=curr_user
@@ -1134,10 +1210,10 @@ def send_packages(id):
         db.session.add(package_send)
 
         curr_inside = package.inside
-        curr_package = form['quantity'].data
+        curr_package = request.form['quantity']
 
-        package.inside = curr_inside - curr_package
-        package.outside += curr_package
+        package.inside = curr_inside - int(curr_package)
+        package.outside += int(curr_package)
 
 
         db.session.commit()
@@ -1150,12 +1226,66 @@ def send_packages(id):
                            package=package, title="Send Package")
 
 # receive package
-#
-#
-#
-#
-#
-#
+@admin.route('/packages/receive/<int:id>', methods=['GET', 'POST'])
+@login_required
+def receive_packages(id):
+    """
+    Receive packages
+    """
+    check_admin()
+
+    add_package = False
+
+    package = Package.query.get_or_404(id)
+    condition = Condition.query.all()
+
+    form = PackageReceiveForm(obj=package)
+    form.quantity.data = ""
+    if form.cancel.data:
+        return redirect(url_for('admin.list_packages'))
+
+    if form.validate_on_submit():
+
+        now = datetime.now()
+        curr_user = current_user.id
+        suppliery = form['supplier'].data
+
+        package_receive = PackageReceive()
+
+        package_receive.package_id=package.id,
+        package_receive.condition=request.form['condition'],
+        package_receive.quantity=request.form['quantity'],
+        package_receive.description=form.description.data,
+        package_receive.supplier=suppliery.id,
+        package_receive.user_id=curr_user,
+        package_receive.date=now
+
+        db.session.add(package_receive)
+
+        curr_inside = package.inside
+        curr_outside = package.outside
+        curr_package = request.form['quantity']
+
+        req = request.form.get("condition")
+        condit = db.session.query(Condition).filter(Condition.name=="OK").first()
+        curr_condition = condit.id
+
+        if req != str(curr_condition):
+            package.quantity -= int(curr_package)
+            package.outside = curr_outside - int(curr_package)
+        else:
+            package.inside += int(curr_package)
+            package.outside = curr_outside - int(curr_package)
+
+        db.session.commit()
+
+        flash('You have successfully received package.')
+        # redirect to the pac/kages page
+        return redirect(url_for('admin.list_packages'))
+
+    return render_template('admin/packages/package.html', action="Add",
+                           add_package=add_package, form=form,
+                           package=package, title="Receive Package")
 
 # pdf report
 #
@@ -1170,6 +1300,8 @@ def send_packages(id):
 @login_required
 def details_packages(id):
     "Details one package"
+
+    check_admin()
 
     add_package = False
 

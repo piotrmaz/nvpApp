@@ -9,13 +9,13 @@
         <br />
         {{ utils.flashed_messages() }}
         <br />
-        <h1 style="text-align:center;">Conditions</h1>
+        <h3 style="text-align:center;">Conditions</h3>
         <div class="button-add">
           <a href="{{ url_for('admin.add_condition') }}" class="btn btn-default btn-lg">Add Condition</a>
         </div>
         {% if conditions %}
         <hr class="intro-divider">
-        <div class="center">
+        <div class="center-table">
           <table class="table table-striped table-bordered">
             <thead>
               <tr>

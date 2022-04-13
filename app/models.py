@@ -23,11 +23,13 @@ class Employee(UserMixin, db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     is_admin = db.Column(db.Boolean, default=False)
     is_confirmed = db.Column(db.Boolean, default=False)
+    is_granted = db.Column(db.Boolean, default=False)
     cons_deliv = db.relationship('ConsumableDelivery', backref='consdelivery', lazy='dynamic')
     cons_consumpt = db.relationship('ConsumableConsumption', backref='user_consumption', lazy='dynamic')
     consumable_user_id = db.relationship('Consumable', backref='consumable_user', lazy='dynamic')
     package_delivery_id = db.relationship('PackageDelivery', backref='package_delivery', lazy='dynamic')
     package_send_employee = db.relationship('PackageSend', backref='package_send_employee', lazy='dynamic')
+    package_receive_employee = db.relationship('PackageReceive', backref='package_receive_employee', lazy='dynamic')
 
 
     @property
@@ -105,6 +107,7 @@ class Supplier(db.Model):
     consumable_delivery_id = db.relationship('ConsumableDelivery', backref='supplier', lazy='dynamic')
     package_supplier_id = db.relationship('PackageDelivery', backref='package_supplier', lazy='dynamic')
     packages_send_supplier = db.relationship('PackageSend', backref='packages_send_supplier', lazy='dynamic')
+    package_receive_supplier = db.relationship('PackageReceive', backref='packages_receive_supplier', lazy='dynamic')
 
 
     def __repr__(self):
@@ -140,6 +143,7 @@ class Condition(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60))
+    package_receive_condition = db.relationship('PackageReceive', backref='package_condition', lazy='dynamic')
 
     def __repr__(self):
         return '<Condition: {}>'.format(self.name)
@@ -172,6 +176,7 @@ class Package(db.Model):
     description = db.Column(db.String(200))
     package_delivery_id = db.relationship('PackageDelivery', backref='package_delivery_id', lazy='dynamic')
     packages_send_id = db.relationship('PackageSend', backref='packages_send_id', lazy='dynamic')
+    package_receive_package_id = db.relationship('PackageReceive', backref='package_receive', lazy='dynamic')
 
     def __repr__(self):
         return '<Package: {}>'.format(self.name)
@@ -207,6 +212,24 @@ class PackageSend(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('employees.id'))
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
+class PackageReceive(db.Model):
+    """
+    Create PackageReceive table
+    """
+
+    __tablename__='packagesReceive'
+
+    id = db.Column(db.Integer, primary_key=True)
+    package_id = db.Column(db.Integer, db.ForeignKey('packages.id'))
+    condition = db.Column(db.Integer, db.ForeignKey('conditions.id'))
+    quantity = db.Column(db.Integer)
+    description = db.Column(db.String(200))
+    supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('employees.id'))
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<PackageReceive: {}>'.format(self.name)
 
 #consumables
 class Unit(db.Model):

@@ -12,14 +12,14 @@
  <div class="outer">
     <div class="middle">
       <div class="inner">
-        <div class="center">
+        <div class="center-table">
             {% if add_unit %}
-                <h1>Add Unit</h1>
+                <h3>Add Unit</h3>
             {% else %}
-                <h1>Edit Unit</h1>
+                <h3>Edit Unit</h3>
             {% endif %}
             <br/>
-            {{ wtf.quick_form(form) }}
+            {{ wtf.quick_form(form, novalidate=True) }}
         </div>
       </div>
     </div>

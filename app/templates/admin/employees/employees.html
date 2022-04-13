@@ -9,7 +9,7 @@
         <br/>
         {{ utils.flashed_messages() }}
         <br/>
-        <h1 style="text-align:center;">Employees</h1>
+        <h3 style="text-align:center;">Employees</h3>
         {% if employees %}
           <hr class="intro-divider">
           <div class="center">
@@ -19,25 +19,64 @@
                   <th width="5%"> # </th>
                   <th width="15%"> Name </th>
                   <th width="15%"> Email </th>
-                  <th width="30%"> Department </th>
-                  <th width="30%"> Role </th>
-                  <th width="15%"> Assign </th>
-                  <th width="15%"> Delete </th>
+                  <th width="15%"> Department </th>
+                  <th width="15%"> Role </th>
+                  <th width="10%"> Assign </th>
+                  <th width="10%"> Delete </th>
                   <th width="5%"> Confirmed </th>
-                  <th width="5%">  </th>
+                  <th width="5%"></th>
+                  <th width="5%"></th>
+                  <th width="5%"></th>
                 </tr>
               </thead>
               <tbody>
               {% for employee in employees %}
                 {% if employee.is_admin %}
+                  {% if employee.is_granted %}
+                  <tr style="background-color: ##d9e5f2; color: rgb(63 124 189);">
+                    <td></td>
+                    <td> {{ employee.first_name }} {{ employee.last_name }} </td>
+                    <td> {{ employee.email }} </td>
+                    <td>
+                      {% if employee.department %}
+                        {{ employee.department.name }}
+                      {% else %}
+                        -
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if employee.role %}
+                        {{ employee.role.name }}
+                      {% else %}
+                        -
+                      {% endif %}
+                    </td>
+                    <td>
+                      <a href="{{ url_for('admin.assign_employee', id=employee.id) }}"><img src="../../../static/img/person-lines-fill.svg" alt="edit_button"></a>
+                    </td>
+                    <td>
+                      <a href="{{ url_for('admin.delete_employee', id=employee.id) }}"><img src="../../../static/img/trash3.svg" alt="delete_button"></a>
+                    </td>
+                    {% if employee.is_confirmed==True %}
+                    <td style="background-color: #d9ffcc;"> YES </td>
+                    {% else %}
+                    <td style="background-color: #ffcccc"> NO </td>
+                    {% endif %}
+                    <td><a href="{{ url_for('admin.confirmed_employee', id=employee.id) }}"> CONFIRM </a></td>
+                    <td style="border-color: green;"><a href="{{ url_for('admin.grant_admin_priviliges', id=employee.id) }}"> GANT PRVL </a></td>
+                    <td><a href="{{ url_for('admin.deny_admin_priviliges', id=employee.id) }}"> DENY PRVL </a></td>
+                  </tr>
+                  {% else %}
                     <tr style="background-color: ##d9e5f2; color: rgb(63 124 189);">
                         <td></td>
-                        <td>Admin</td>
+                        <td> {{ employee.first_name }} {{ employee.last_name }} </td>
+                        <td> N/A </td>
                         <td> N/A </td>
                         <td> N/A </td>
                         <td> N/A </td>
                         <td> N/A </td>
                     </tr>
+                    {% endif %}
                 {% else %}
                     <tr>
                       <td></td>
@@ -69,6 +108,8 @@
                       <td style="background-color: #ffcccc"> NO </td>
                       {% endif %}
                       <td><a href="{{ url_for('admin.confirmed_employee', id=employee.id) }}"> CONFIRM </a></td>
+                      <td><a href="{{ url_for('admin.grant_admin_priviliges', id=employee.id) }}"> GANT PRVL </a></td>
+                      <td><a href="{{ url_for('admin.deny_admin_priviliges', id=employee.id) }}"> DENY PRVL </a></td>
                     </tr>
                 {% endif %}
               {% endfor %}

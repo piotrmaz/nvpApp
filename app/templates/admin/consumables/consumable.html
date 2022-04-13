@@ -4,7 +4,7 @@
     {% if add_consumable %}
         Add Consumable
     {% else %}
-        Edit Consumable
+        {{ title }}
     {% endif %}
 {% endblock %}
 {% block body %}
@@ -12,11 +12,11 @@
  <div class="outer">
     <div class="middle">
       <div class="inner">
-        <div class="center">
+        <div class="center-table">
             {% if add_consumable %}
-                <h1>Add Consumable</h1>
+                <h3>Add Consumable</h3>
             {% else %}
-                <h1>Edit Consumable</h1>
+                <h3>{{ title }}</h3>
             {% endif %}
             <br/>
             {{ wtf.quick_form(form, novalidate=True) }}

@@ -12,14 +12,14 @@
  <div class="outer">
     <div class="middle">
       <div class="inner">
-        <div class="center">
+        <div class="center-table">
             {% if add_role %}
-                <h1>Add Role</h1>
+                <h3>Add Role</h3>
             {% else %}
-                <h1>Edit Role</h1>
+                <h3>Edit Role</h3>
             {% endif %}
             <br/>
-            {{ wtf.quick_form(form) }}
+            {{ wtf.quick_form(form, novalidate=True) }}
         </div>
       </div>
     </div>

@@ -12,11 +12,11 @@
  <div class="outer">
     <div class="middle">
       <div class="inner">
-        <div class="center">
+        <div class="center-table">
             {% if add_condition %}
-                <h1>Add Condition</h1>
+                <h3>Add Condition</h3>
             {% else %}
-                <h1>Edit Condition</h1>
+                <h3>Edit Condition</h3>
             {% endif %}
             <br/>
             {{ wtf.quick_form(form, novalidate=True) }}

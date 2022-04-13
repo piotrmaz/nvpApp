@@ -9,8 +9,8 @@
         <br />
         {{ utils.flashed_messages() }}
         <br />
-        <h3 style="text-align:center;">Details {{ package.parcel.name }} ({{ package.description }})</h3>
-        <h4 style="text-align:center;"><a href="{{ url_for('admin.list_packages') }}">Go back</a></h4>
+        <h3 style="text-align:center;">Packages details</h3>
+        <h4 style="text-align:center;"><a href="{{ url_for('home.list_packages') }}">Go back</a></h4>
         <hr class="intro-divider">
         <div class="center">
           <table class="table table-light table-bordered">
@@ -39,7 +39,7 @@
               <div class="accordion-item">
                 <h2 class="accordion-header" id="flush-headingOne">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                    <h5 style="margin-left: auto; font-weight: bold;">History of consumption {{ package.parcel.name }}</h5>
+                    <h5 style="margin-left: auto; font-weight: bold;">History of Packages consumption</h5>
                   </button>
                 </h2>
                 <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
@@ -62,7 +62,7 @@
                 <div class="accordion-item">
                   <h2 class="accordion-header" id="flush-headingTwo">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                      <h5 style="margin-left: auto; font-weight: bold;">History of delivery {{ package.parcel.name }}</h5>
+                      <h5 style="margin-left: auto; font-weight: bold;">History of package delivery</h5>
                     </button>
                   </h2>
                   <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">

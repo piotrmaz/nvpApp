@@ -12,6 +12,7 @@ class DepartmentForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     description = StringField('Description', validators=[DataRequired()])
     submit = SubmitField('Submit')
+    cancel = SubmitField('Cancel')
 
 class RoleForm(FlaskForm):
     """
@@ -20,6 +21,7 @@ class RoleForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     description = StringField('Description', validators=[DataRequired()])
     submit = SubmitField('Submit')
+    cancel = SubmitField('Cancel')
 
 class EmployeeAssignForm(FlaskForm):
     """
@@ -30,6 +32,7 @@ class EmployeeAssignForm(FlaskForm):
     role = QuerySelectField(query_factory=lambda: Role.query.all(),
                             get_label="name")
     submit = SubmitField('Submit')
+    cancel = SubmitField('Cancel')
 
 class SupplierForm(FlaskForm):
     """
@@ -37,6 +40,7 @@ class SupplierForm(FlaskForm):
     """
     name = StringField('Name', validators=[DataRequired()])
     submit = SubmitField('Submit')
+    cancel = SubmitField('Cancel')
 
 class UnitsForm(FlaskForm):
     """
@@ -44,6 +48,7 @@ class UnitsForm(FlaskForm):
     """
     unit_type = StringField('Unit Type', validators=[DataRequired()])
     submit = SubmitField('Submit')
+    cancel = SubmitField('Cancel')
 
 class ConsumableForm(FlaskForm):
     """
@@ -127,6 +132,18 @@ class PackageFormEdit(FlaskForm):
 
     quantity = IntegerField('Quantity')
     inside = IntegerField('Inside')
+    description = StringField('Description')
+    submit = SubmitField('Submit')
+    cancel = SubmitField('Cancel')
+
+class PackageReceiveForm(FlaskForm):
+    """
+    Form for admin to receive packages
+    """
+
+    quantity = IntegerField('Quantity')
+    condition = QuerySelectField(query_factory=lambda: Condition.query.all(), get_label="name")
+    supplier = QuerySelectField(query_factory=lambda: Supplier.query.all(), get_label="name")
     description = StringField('Description')
     submit = SubmitField('Submit')
     cancel = SubmitField('Cancel')

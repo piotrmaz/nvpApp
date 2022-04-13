@@ -9,13 +9,13 @@
         <br/>
         {{ utils.flashed_messages() }}
         <br/>
-        <h1 style="text-align:center;">Packages</h1>
+        <h3 style="text-align:center;">Packages</h3>
         <div class="button-add">
         <a href="{{ url_for('admin.add_package') }}" class="btn btn-default btn-lg">Add Packages</a>
         </div>
         {% if packages %}
           <hr class="intro-divider">
-          <div class="center">
+          <div class="center" style="width: 60%;">
             <table class="table table-striped table-bordered">
               <thead>
                 <tr>
@@ -26,7 +26,7 @@
                   <th width="15%"> &Sigma;  Outside </th>
                   <th width="15%"> Description </th>
                   <th width="25%"> Delivery </th>
-                  <!-- <th width="25%"> Receive </th> -->
+                  <th width="25%"> Receive </th>
                   <th width="25%"> Send </th>
                   <th width="5%"> Edit </th>
                   <th width="5%"> Delete </th>
@@ -42,7 +42,8 @@
                   <td> {{ package.outside }}</td>
                   <td style="text-transform: uppercase;"> {{ package.description }} </td>
                   <td><a href="{{ url_for('admin.delivery_packages', id=package.id) }}"><img src="../../../static/img/plus-circle.svg" alt="add_button"></a></td>
-                  <td><a href="{{ url_for('admin.send_packages', id=package.id) }}"><img src="../../../static/img/dash-circle.svg" alt="minus_button"></a></td>
+                  <td><a href="{{ url_for('admin.receive_packages', id=package.id) }}"><img src="../../../static/img/truck.svg" alt="add_button"></a></td>
+                  <td><a href="{{ url_for('admin.send_packages', id=package.id) }}"><img src="../../../static/img/send.svg" alt="minus_button"></a></td>
                   <td>
                     <a href="{{ url_for('admin.edit_package', id=package.id) }}"><img src="../../../static/img/pencil-square.svg" alt="edit_button"></a>
                   </td>

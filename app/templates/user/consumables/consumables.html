@@ -9,7 +9,7 @@
         <br />
         {{ utils.flashed_messages() }}
         <br />
-        <h1 style="text-align:center;">Consumables</h1>
+        <h3 style="text-align:center;">Consumables</h3>
         {% if consumables %}
         <hr class="intro-divider">
         <div class="center">
@@ -22,7 +22,6 @@
                 <th width="10%"> Unit </th>
                 <th width="15%"> Description </th>
                 <th width="35%"> Supplier </th>
-                <!-- <th width="25%"> User </th> -->
                 <th width="5%"> Delivery </th>
                 <th width="5%"> Use </th>
               </tr>
@@ -32,7 +31,7 @@
               <tr>
                 <td></td>
                 <td><a href="{{ url_for('home.details_consumable', id=consumable.id) }}"> {{ consumable.name }}</a> </td>
-                {% if consumable.quantity < consumable.min_stock %}
+                {% if consumable.quantity <= consumable.min_stock %}
                 <td style="background-color:red;"> {{ consumable.quantity }} </td>
                 {% else %}
                 <td> {{ consumable.quantity }} </td>
@@ -40,7 +39,6 @@
                 <td> {{ consumable.consumable.unit_type }} </td>
                 <td> {{ consumable.description }} </td>
                 <td> {{ consumable.supplier.name }} </td>
-                <!-- <td> {{ consumable.consumable_user.username }} </td> -->
                 <td style="text-align: center;"><a href="{{ url_for('home.delivery_consumables', id=consumable.id) }}"><img src="../../../static/img/plus-circle.svg" alt="add_button"></img></a></td>
                 <td style="text-align: center;"><a href="{{ url_for('home.consumption_consumables', id=consumable.id) }}"><img src="../../../static/img/dash-circle.svg" alt="minus_button"></a></td>
 

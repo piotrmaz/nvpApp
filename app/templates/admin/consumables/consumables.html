@@ -9,7 +9,7 @@
         <br />
         {{ utils.flashed_messages() }}
         <br />
-        <h1 style="text-align:center;">Consumables</h1>
+        <h3 style="text-align:center;">Consumables</h3>
         <div class="button-add">
           <a href="{{ url_for('admin.add_consumable') }}" class="btn btn-default btn-lg">Add Consumable</a>
         </div>
@@ -37,8 +37,8 @@
               {% for consumable in consumables %}
               <tr>
                 <td></td>
-                <td> {{ consumable.name }} </td>
-                {% if consumable.quantity < consumable.min_stock %}
+                <td><a href="{{ url_for('admin.details_consumable', id=consumable.id) }}"> {{ consumable.name }}</a> </td>
+                {% if consumable.quantity <= consumable.min_stock %}
                 <td style="background-color:red;"> {{ consumable.quantity }} </td>
                 {% else %}
                 <td> {{ consumable.quantity }} </td>

@@ -12,14 +12,14 @@
  <div class="outer">
     <div class="middle">
       <div class="inner">
-        <div class="center">
+        <div class="center-table">
             {% if add_department %}
-                <h1>Add Department</h1>
+                <h3>Add Department</h3>
             {% else %}
-                <h1>Edit Department</h1>
+                <h3>Edit Department</h3>
             {% endif %}
             <br/>
-            {{ wtf.quick_form(form) }}
+            {{ wtf.quick_form(form, novalidate=True) }}
         </div>
       </div>
     </div>
